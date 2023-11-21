@@ -105,6 +105,12 @@ void cleanInput(char* input) {
 
 // Fungsi output menghasilkan tanggapan berdasarkan input pengguna
 void output(const char *input) {
+    // Menambahkan pengecekan jika input kosong
+    if (input[0] == '\0') {
+        printf("Chatbot: Tolong masukkan input terlebih dahulu\n\n");
+        return;
+    }
+
     char cleanedInput[256];
     strcpy(cleanedInput, input);
     cleanInput(cleanedInput);
@@ -141,14 +147,19 @@ void output(const char *input) {
 
 int main() {
     char input[256];
-    
+
     srand(time(NULL));
-    
+
     // Loop utama untuk interaksi dengan pengguna
     while (1) {
         printf("User: ");
         fgets(input, sizeof(input), stdin);
-        input[strlen(input) - 1] = '\0';
+
+        // Menghapus karakter newline jika input tidak kosong
+        if (input[0] != '\0') {
+            input[strlen(input) - 1] = '\0';
+        }
+
         output(input);
     }
 }
