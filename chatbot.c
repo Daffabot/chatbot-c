@@ -7,6 +7,11 @@
 #define total_quest 27
 #define total_answer 3
 
+// Function to check for exact match
+int isExactMatch(const char *input, const char *trigger) {
+    return strcmp(input, trigger) == 0;
+}
+
 int tolower();
 
 // Matriks trigger berisi pola-pola yang dapat menjadi input dari pengguna
@@ -99,7 +104,7 @@ void cleanInput(char* input) {
 
 
 // Fungsi output menghasilkan tanggapan berdasarkan input pengguna
-void output(const char* input) {
+void output(const char *input) {
     char cleanedInput[256];
     strcpy(cleanedInput, input);
     cleanInput(cleanedInput);
@@ -107,11 +112,12 @@ void output(const char* input) {
     char product[256];
     product[0] = '\0';
     int foundDaQuest = -1;
-    
+
     // Pengecekan apakah input cocok dengan pola-pola yang ada
     for (int theColumn = 0; theColumn < total_quest; theColumn++) {
         for (int repeater = 0; repeater < total_answer; repeater++) {
-            if (strstr(triggers[theColumn][repeater], cleanedInput) != NULL) {
+            // Mengganti strstr dengan isExactMatch
+            if (isExactMatch(cleanedInput, triggers[theColumn][repeater])) {
                 foundDaQuest = theColumn;
                 break;
             }
@@ -120,22 +126,22 @@ void output(const char* input) {
             break;
         }
     }
-    
+
     // Jika ditemukan trigger yang cocok, ambil tanggapan dari matriks responses
     if (foundDaQuest >= 0) {
         strcpy(product, getRandomResponse(responses[foundDaQuest], total_answer));
     } else {
-    	// Jika tidak ada trigger yang cocok, ambil tanggapan alternatif
+        // Jika tidak ada trigger yang cocok, ambil tanggapan alternatif
         strcpy(product, getRandomResponse(alternativeResponses, total_answer));
     }
-    
+
     // Tampilkan hasil tanggapan ke layar
     printf("Chatbot: %s\n\n", product);
 }
 
 int main() {
     char input[256];
-
+    
     srand(time(NULL));
     
     // Loop utama untuk interaksi dengan pengguna
